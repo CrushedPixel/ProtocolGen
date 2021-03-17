@@ -1,8 +1,8 @@
 package de.johni0702.mc.protocolgen.types;
 
 import io.netty.buffer.ByteBuf;
-import org.spacehq.opennbt.NBTIO;
-import org.spacehq.opennbt.tag.builtin.CompoundTag;
+import com.github.steveice10.opennbt.NBTIO;
+import com.github.steveice10.opennbt.tag.builtin.CompoundTag;
 
 import java.io.*;
 
@@ -87,12 +87,12 @@ public final class ItemStack {
         } else {
             int amount = in.readByte();
             int data = in.readShort();
-            CompoundTag nbt = (CompoundTag) NBTIO.readTag(new DataInputStream(new InputStream() {
+            CompoundTag nbt = (CompoundTag) NBTIO.readTag(new InputStream() {
                 @Override
                 public int read() throws IOException {
                     return in.readUnsignedByte();
                 }
-            }));
+            });
             return new ItemStack(id, amount, data, nbt);
         }
     }
@@ -107,12 +107,12 @@ public final class ItemStack {
             if (is.nbt == null) {
                 out.writeByte(0);
             } else {
-                NBTIO.writeTag(new DataOutputStream(new OutputStream() {
+                NBTIO.writeTag(new OutputStream() {
                     @Override
                     public void write(int b) throws IOException {
                         out.writeByte(b);
                     }
-                }), is.nbt);
+                }, is.nbt);
             }
         }
     }
